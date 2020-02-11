@@ -42,7 +42,7 @@
 \pagestyle{fancyplain}
 \renewcommand{\headrulewidth}{0pt} 
 \fancyhf{}
-\fancyhead[R]{\thepage /3}
+\fancyhead[R]{\thepage /2}
 
 % Paragraph Spacing and Indent
 \setlength{\parindent}{0in}
