@@ -28,8 +28,11 @@ jobs:
             texlive-fonts-recommended \
             texlive-bibtex-extra
 
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+
       - name: Build resume
-        run: make resume
+        run: mise run build
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
