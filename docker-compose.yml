@@ -1,0 +1,6 @@
+services:
+  latexmk:
+    build: .
+    image: latexmk
+    volumes:
+      - .:/data:rw

@@ -1,0 +1,52 @@
+[env]
+_.path = [
+  "{{env.HOME}}/Library/TinyTeX/bin/universal-darwin",
+  "{{env.HOME}}/.TinyTeX/bin/x86_64-linux",
+]
+
+[tasks.build]
+description = "Compile AmrAbed.pdf resume"
+alias = "b"
+sources = ["AmrAbed.tex", "sections/*.tex", "*.bib", "*.cls"]
+outputs = ["AmrAbed.pdf"]
+run = '''
+if command -v latexmk >/dev/null 2>&1; then
+  echo "Building AmrAbed.pdf using local latexmk..."
+  latexmk -pdf AmrAbed.tex
+elif command -v docker >/dev/null 2>&1; then
+  echo "Building AmrAbed.pdf using Docker..."
+  docker compose run --rm latexmk AmrAbed.tex
+else
+  echo "Error: Neither latexmk nor docker found on system." >&2
+  exit 1
+fi
+'''
+
+[tasks.clean]
+description = "Clean LaTeX auxiliary build files"
+alias = "c"
+run = '''
+if command -v latexmk >/dev/null 2>&1; then
+  latexmk -c AmrAbed.tex 2>/dev/null || true
+fi
+rm -f *.aux *.log *.out *.bbl *.blg *.fls *.fdb_latexmk bu*.aux bu*.bbl bu*.blg bu*.out
+'''
+
+[tasks.distclean]
+description = "Clean auxiliary files and compiled PDF"
+depends = ["clean"]
+run = "rm -f AmrAbed.pdf"
+
+[tasks."docker:build"]
+description = "Build AmrAbed.pdf using Docker container"
+run = "docker compose run --rm latexmk AmrAbed.tex"
+
+[tasks.verify]
+description = "Run full verification (clean and build)"
+alias = "v"
+run = "mise run distclean && mise run build"
+
+[shell_alias]
+b = "mise run build"
+c = "mise run clean"
+v = "mise run verify"
