@@ -1,0 +1,33 @@
+\documentclass{resume}
+
+\usepackage{fancyhdr}
+\usepackage{fontawesome}
+\usepackage[hmargin=1.25cm, vmargin=0.75cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\begin{document}
+
+\input{sections/title}
+
+\begin{minipage}[t]{0.60\textwidth} % column 1
+\input{sections/summary}
+\input{sections/experience}
+\end{minipage}
+\hfill  
+\begin{minipage}[t]{0.33\textwidth} % column 2
+\input{sections/skills}
+\input{sections/education}
+\input{sections/certifications}
+\input{sections/info}
+\end{minipage}
+
+\newpage
+\pagenumber
+\input{sections/more}
+\input{sections/projects}
+\input{sections/publications}
+
+\end{document}  \documentclass[]{article}

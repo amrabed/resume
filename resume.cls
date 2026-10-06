@@ -1,10 +1,14 @@
+% Intro Options
+\ProvidesClass{resume}[2018/09/22 CV class]
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{resume}
-\LoadClass[10pt]{article}
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
-\ProcessOptions
+\DeclareOption{print}{\def\@cv@print{}}
+\DeclareOption*{%
+  \PassOptionsToClass{\CurrentOption}{article}
+}
+\ProcessOptions\relax
+\LoadClass{article}
 
-% Publications
+% % Publications
 \RequirePackage[english]{babel}
 \makeatletter
 \renewcommand\@biblabel[1]{}
@@ -16,63 +20,67 @@
   \setlength{\itemsep}{0.5ex}
 }
 
-% Page margins
-\RequirePackage[left=1.25in,right=0.75in,top=0.75in,bottom=0.75in]{geometry}
+% Color definitions
+\usepackage[usenames,dvipsnames]{xcolor}
+\definecolor{page}{HTML}{666666}
+\definecolor{primary}{HTML}{2b2b2b}
+\definecolor{headings}{HTML}{6A6A6A}
+\definecolor{subheadings}{HTML}{333333}
 
-% Font
-%\RequirePackage{fontspec}
-%\setmainfont{Times New Roman}
+% Set main fonts
+\usepackage{fontspec}
+\setmainfont[Color=primary, Path = fonts/lato/,BoldItalicFont=Lato-BolIta,BoldFont=Lato-Bol,ItalicFont=Lato-RegIta]{Lato-Reg}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text, Path = fonts/raleway/]{Raleway-ExtraLight}
 
-% Section and Subsection Formatting
-\RequirePackage{titlesec}
-\usepackage{lipsum}% http://ctan.org/pkg/lipsum
-\usepackage{everyshi}% http://ctan.org/pkg/everyshi
-\usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
+% Page number
+\usepackage{lastpage}
+\usepackage[absolute]{textpos}
+\setlength{\TPHorizModule}{1mm}
+\setlength{\TPVertModule}{1mm}
+\newcommand{\pagenumber}{\begin{textblock}{60}(155,5)
+\color{page}\fontspec[Path = fonts/raleway/]{Raleway-ExtraLight}\fontsize{8pt}{10pt}\selectfont
+Abed \thepage /\pageref{LastPage}
+\end{textblock}}
 
-%\newfontfamily\headingfont[Ligatures=TeX]{fonts/Cambria}
-\titleformat{\section}{\scshape\MakeUppercase\bfseries}{}{0em}{}
-\titleformat{\subsection}[runin]{\bfseries}{}{0em}{\gdef\@section@title@{\thesubsection\quad\@currentlabelname{}(cont'd)}}
-\titlespacing*{\section}{-0.5in}{2ex}{0.5ex}
-\titlespacing*{\subsection}{0pt}{3pt}{0pt}
+% Name command
+\newcommand{\namesection}[2]{
+\centering{
+\fontsize{40pt}{60pt}
+\fontspec[Path = fonts/lato/]{Lato-Lig}\selectfont #1
+} \\[5pt]
+\centering{
+\color{headings}
+\fontspec[Path = fonts/raleway/]{Raleway-Medium}\fontsize{11pt}{14pt}\selectfont #2}
+\noindent\makebox[\linewidth]{\color{headings}\rule{\paperwidth}{0.4pt}}
+\vspace{-15pt}
+}
 
+% Section seperators
+\usepackage{titlesec}
+\titlespacing{\section}{0pt}{0pt}{0pt}
+\titlespacing{\subsection}{0pt}{0pt}{0pt}
+\newcommand{\sectionsep}{\vspace{8pt}}
 
-% Page Numbering
-\RequirePackage{lastpage}
-\RequirePackage{fancyhdr}
-\pagestyle{fancyplain}
-\renewcommand{\headrulewidth}{0pt} 
-\fancyhf{}
-\fancyhead[R]{\thepage /2}
+% Headings command
+\titleformat{\section}{\color{headings}
+\scshape\fontspec[Path = fonts/lato/]{Lato-Reg}\fontsize{16pt}{24pt}\selectfont \raggedright\uppercase}{}{0em}{}
 
-% Paragraph Spacing and Indent
-\setlength{\parindent}{0in}
-%\setlength{\parskip}{1em}
+% Subeadings command
+\titleformat{\subsection}{
+\color{subheadings}\fontspec[Path = fonts/lato/]{Lato-Bol}\fontsize{12pt}{12pt}\selectfont\bfseries\uppercase}{}{0em}{}
 
-% Hyphenation: disabled
-\RequirePackage[none]{hyphenat}
+\newcommand{\runsubsection}[1]{
+\color{subheadings}\fontspec[Path = fonts/lato/]{Lato-Bol}\fontsize{12pt}{12pt}\selectfont\bfseries\uppercase {#1} \normalfont}
 
-% Lists: no indent, no spacing
-\RequirePackage{enumitem}
-\setlist[itemize]{leftmargin=*, nolistsep}
+% Descriptors command
+\newcommand{\descript}[1]{
+\color{subheadings}\raggedright\scshape\fontspec[Path = fonts/raleway/]{Raleway-Medium}\fontsize{11pt}{13pt}\selectfont {#1 \\} \normalfont}
 
-% Name
-\newcommand{\name}[1]{%
-\begin{center}%
-\begin{Huge}%
-\textbf{#1}%
-\end{Huge}%
-\end{center}}
+% Location command
+\newcommand{\location}[1]{
+\color{subheadings}\raggedright\fontspec[Path = fonts/raleway/]{Raleway-Medium}\fontsize{10pt}{12pt}\selectfont {#1\\} \normalfont}
 
-% Contact Information
-\newenvironment{contact}
-{\vspace{-0.25in}\begin{center}}
-{\end{center}}
-
-% Objective
-\newcommand{\objective}[1]{\section{Objective}#1}
-
-% Hyperlinks
-\RequirePackage[linkcolor=black,citecolor=black,urlcolor=black,filecolor=black]{hyperref}
-
-% \RequirePackage{import}
-\newif\ifsplit
+% Bullet Lists with fewer gaps command
+\newenvironment{tightemize}{
+\vspace{-\topsep}\begin{itemize}\itemsep1pt \parskip0pt \parsep0pt}
+{\end{itemize}\vspace{-\topsep}}
