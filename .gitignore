@@ -8,6 +8,7 @@
 *.log
 *.out
 *.synctex.gz
+*.xdv
 bu*.aux
 bu*.bbl
 bu*.blg

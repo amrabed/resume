@@ -7,12 +7,12 @@ _.path = [
 [tasks.build]
 description = "Compile AmrAbed.pdf resume"
 alias = "b"
-sources = ["AmrAbed.tex", "sections/*.tex", "*.bib", "*.cls"]
+sources = ["AmrAbed.tex", "sections/*.tex", "*.bib", "*.cls", "fonts/**"]
 outputs = ["AmrAbed.pdf"]
 run = '''
 if command -v latexmk >/dev/null 2>&1; then
   echo "Building AmrAbed.pdf using local latexmk..."
-  latexmk -pdf AmrAbed.tex
+  latexmk -xelatex AmrAbed.tex
 elif command -v docker >/dev/null 2>&1; then
   echo "Building AmrAbed.pdf using Docker..."
   docker compose run --rm latexmk AmrAbed.tex
@@ -29,7 +29,7 @@ run = '''
 if command -v latexmk >/dev/null 2>&1; then
   latexmk -c AmrAbed.tex 2>/dev/null || true
 fi
-rm -f *.aux *.log *.out *.bbl *.blg *.fls *.fdb_latexmk bu*.aux bu*.bbl bu*.blg bu*.out
+rm -f *.aux *.log *.out *.bbl *.blg *.fls *.fdb_latexmk *.xdv bu*.aux bu*.bbl bu*.blg bu*.out
 '''
 
 [tasks.distclean]
